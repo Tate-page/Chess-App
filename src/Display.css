@@ -1,0 +1,27 @@
+.gameScreenBackground{
+  background-image: url(http://www.impactcheck.com/wp-content/uploads/2014/01/free-background-4.jpg);
+  width:100%;
+  display: flex;
+  flex: number;
+  background-size: cover;
+  height: 80%;
+}
+
+#gameScreenLeft{
+  width: 10%;
+  flex: 2;
+}
+
+#gameScreenCenter{
+  width: 50%;
+  height: 100%;
+  flex: 1;
+  min-width: 480px;
+  min-height: 480px;
+}
+
+
+#gameScreenRight{
+  width: 10%;
+  flex: 2;
+}
