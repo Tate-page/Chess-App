@@ -39,6 +39,7 @@ class Chessboard extends React.Component{
       clickedY: null,
       childVisible: true,
       isTileSelected: false,
+      isBlackTurn: false,
     };
     this.filldefaultboard=this.filldefaultboard.bind(this);
   }
@@ -168,22 +169,35 @@ class Chessboard extends React.Component{
   }
   tileClick(y,x){
     console.log("x: ",x," y: ",y);
+    console.log("this.state.isBlackTurn:", this.state.isBlackTurn);
+    console.log("this.state.board[y][x].isBlackTile:", this.state.board[y][x].isBlackPiece);
     if(this.state.isTileSelected===true){
-      console.log("paths: ", this.state.board[this.state.clickedY][this.state.clickedX].possiblePaths);
+      //console.log("board: ", this.state.board);
+      //console.log("paths: ", this.state.board[this.state.clickedY][this.state.clickedX].possiblePaths);
+
       var isMoveValid=ruleBook(this.state, y, x);
+      console.log("this.state.isBlackTurn:", this.state.isBlackTurn);
+      console.log("this.state.board[y][x].isBlackTile:", this.state.board[y][x].isBlackPiece);
       if(isMoveValid !== true){
         console.log("Error: ", isMoveValid);
       }else{
         this.state.board[y][x]=this.state.board[this.state.clickedY][this.state.clickedX];
         this.state.board[this.state.clickedY][this.state.clickedX]=0;
+        if(this.state.isBlackTurn){
+          this.state.isBlackTurn = false;
+        }else{
+          this.state.isBlackTurn = true;
+        }
       }
-      this.state.board[y][x].isInitPos=false;
+
       this.state.board[y][x].possiblePaths=this.falseBoard();
       this.state.clickedY=null;
       this.state.clickedX=null;
       this.state.isTileSelected=false;
       console.log("isTileSelected: ", false);
-    }else if(this.state.board[y][x]!="0"){//if a tile isn't selected then file in the selected positions
+    }else if(this.state.board[y][x]!="0" && this.state.isBlackTurn === this.state.board[y][x].isBlackPiece){//if a tile isn't selected then file in the selected positions
+      //use isBlackTurn to determine if the selected tile is the correct one
+
       this.state.clickedY=y;
       this.state.clickedX=x;
       this.state.isTileSelected=true;
@@ -191,7 +205,7 @@ class Chessboard extends React.Component{
       generatePossiblePaths(this.state,y,x);
 
     }else{
-      console.log("you failed");
+      console.log("the tile you selected is either not the correct piece color or isn't a piece");
     }
 
     this.forceUpdate();
@@ -214,6 +228,16 @@ class Chessboard extends React.Component{
     return(row);
   }
 
+  renderTurn(){
+    var row=[];
+    if(this.state.isBlackTurn){
+      row.push(<h4 key="black" id="displayTurn">It's Black's Turn</h4>);
+    }else{
+      row.push(<h4 key="white" id="displayTurn">It's White's Turn</h4>);
+    }
+    return(row);
+  }
+
   render(){
     return(
       <div>
@@ -229,6 +253,10 @@ class Chessboard extends React.Component{
           <div className="board-row">{this.renderRow(5)}</div>
           <div className="board-row">{this.renderRow(6)}</div>
           <div className="board-row">{this.renderRow(7)}</div>
+        </div>
+
+        <div id="gameInfo">
+          {this.renderTurn()}>
         </div>
       </div>
     );

@@ -8,6 +8,13 @@ function getGameScreenHeight(){
 
 class Display extends React.Component{
 
+  constructor(props){
+    super(props);
+    this.state = {
+      isBlackTurn: false,
+    }
+  }
+
   render(){
     return(
       <div className="gameScreenBackground">
